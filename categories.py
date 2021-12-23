@@ -3,6 +3,7 @@ from typing import Dict, List, NamedTuple
 
 import db
 
+
 class Category(NamedTuple):
     """Структура категории"""
     name: str
@@ -25,12 +26,7 @@ class Categories:
         """Возвращает справочник категорий"""
         return self._categories
 
-""""
-    def get_category_by_codename(self, category_name: str) -> str:
-        found = None
-        for category in self._categories:		
-            if category['codename'] == category_name:
-               found = category
-               break
-        return found			
-"""
+    def get_name_by_codename(self, category_codename: str) -> str:
+        for category in self._categories:
+            if category['codename'] == category_codename:
+                return category['name']

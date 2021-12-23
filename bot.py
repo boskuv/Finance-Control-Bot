@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 categories = Categories().get_all_categories()
 
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     """Отправляет приветственное сообщение и помощь по боту"""
@@ -26,14 +27,15 @@ async def send_welcome(message: types.Message):
         "Сегодняшняя статистика: /today\n"
         "За текущий месяц: /month\n"
         "Последние внесённые расходы: /expenses")
-	
+
 
 @dp.message_handler(commands="kb", state=None)
 async def get_keyboard(message: types.Message):
     """Выводит категории трат для выбора"""
     keyboard = types.InlineKeyboardMarkup(row_width=3)
     for category in categories:
-        keyboard.insert(types.InlineKeyboardButton(text=category.get("name"), callback_data=category.get("codename")))
+        keyboard.insert(types.InlineKeyboardButton(text=category.get("name"),
+                        callback_data=category.get("codename")))
     await FinCheckerState.s1.set()
     await message.answer("Выберите категорию трат:", reply_markup=keyboard)
 
@@ -44,7 +46,7 @@ async def push_category(call: types.CallbackQuery, state: FSMContext):
     await state.update_data(category=call.data)
     await FinCheckerState.s2.set()
     await call.answer(text="Введите затраченную сумму:", show_alert=True)
-	
+
 
 @dp.message_handler(state=FinCheckerState.s2)
 async def push_purchase(message: types.Message, state: FSMContext):
@@ -53,7 +55,7 @@ async def push_purchase(message: types.Message, state: FSMContext):
     if is_valid(message.text):
         try:
             expense = expenses.add_expense(",".join([states.get("category"), message.text])) # зачем возврат значения
-            answer_message = (f"Добавлены траты: {expense.amount} руб на {expense.category_codename}.\n\n") # категория, а не codename!
+            answer_message = (f"Добавлены траты: {expense.amount} руб в категории '{Categories().get_name_by_codename(expense.category_codename)}'.\n\n")  # более красивый вызов метода 
         except exceptions.NotCorrectMessage as e:
             answer_message = (str(e))
     else:
@@ -61,5 +63,6 @@ async def push_purchase(message: types.Message, state: FSMContext):
     await message.answer(answer_message)
     await state.finish()
 
+
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True) # skip_updates?
+    executor.start_polling(dp, skip_updates=True)  # skip_updates?
