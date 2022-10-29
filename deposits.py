@@ -46,6 +46,11 @@ def add_deposit(raw_message: str) -> Deposit:
     )
 
 
+def get_sum_deposit_for_year() -> float:
+    """Получить сумму пополнений за год"""
+    return db.fetchsumforcurrentyear("deposit")
+
+
 def _parse_message(raw_message: str) -> Message:
     """Парсит текст пришедшего сообщения о новом поступлении"""
     card = raw_message.split(",")[0]

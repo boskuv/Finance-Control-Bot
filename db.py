@@ -19,7 +19,7 @@ def insert(table: str, column_values: Dict):
     conn.commit()
 
 
-def fetchall(table: str, columns: List[str]) -> List[Tuple]:
+def fetchall(table: str, columns: List[str]) -> List[Tuple]:  # TODO: naming
     columns_joined = ", ".join(columns)
     cursor.execute(f"SELECT {columns_joined} FROM {table}")
     rows = cursor.fetchall()
@@ -30,6 +30,14 @@ def fetchall(table: str, columns: List[str]) -> List[Tuple]:
             dict_row[column] = row[index]
         result.append(dict_row)
     return result
+
+
+def fetchsumforcurrentyear(table: str) -> float:
+    cursor.execute(
+        f"select sum(amount) FROM {table} where created > date('now','start of year')"
+    )
+    sum = cursor.fetchone()[0]
+    return sum
 
 
 def delete(table: str, row_id: int) -> None:

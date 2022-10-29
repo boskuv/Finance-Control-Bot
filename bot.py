@@ -43,10 +43,18 @@ async def send_welcome(message: types.Message):
         "Бот для учёта финансов:\n\n"
         "Добавить расход: /expense\n"
         "Добавить пополнение: /deposit\n"
+        "Пополнения за текущий календарный год: /sum_deposit\n"
         # "Сегодняшняя статистика: /today\n"
         # "За текущий месяц: /month\n"
         # "Последние внесённые расходы: /expenses"
     )
+
+
+@dp.message_handler(commands="sum_deposit")
+async def get_sum_of_deposits_for_year(message: types.Message):
+    """Пополнения за календарный год"""
+    sum = deposits.get_sum_deposit_for_year()
+    await message.answer(f"За текущий год на счета поступило: {sum}")
 
 
 @dp.message_handler(commands="deposit", state=None)
@@ -116,7 +124,8 @@ async def invite_to_choose_expense_category(message: types.Message):
 
 
 @dp.callback_query_handler(
-    text=[category.get("codename") for category in categories], state=FinCheckerState.getting_list_of_expense_categories
+    text=[category.get("codename") for category in categories],
+    state=FinCheckerState.getting_list_of_expense_categories,
 )
 async def push_expense_category(call: types.CallbackQuery, state: FSMContext):
     """Сохраняет выбранную категорию и предлагает ввести сумму траты"""
