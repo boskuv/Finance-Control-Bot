@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  preprocessor:
+    image: finance_conrol-rc1
+    build:
+      context: .
+    container_name: finance_conrol-rc1
+    ports:
+      - "8265:8265"
+    volumes:
+      - ./db/finance.db:/app/db/finance.db
+      - ./bot.ini:/app/bot.ini
+    command: bash -c "python bot.py"
