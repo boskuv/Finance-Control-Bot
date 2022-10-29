@@ -6,6 +6,7 @@ import db
 
 class Category(NamedTuple):
     """Структура категории"""
+
     name: str
     codename: str
     is_regular_expense: bool
@@ -17,9 +18,7 @@ class Categories:
 
     def _load_categories(self) -> List[Category]:
         """Возвращает справочник категорий расходов из БД"""
-        categories = db.fetchall(
-            "category", "name codename is_regular_expense".split()
-        )
+        categories = db.fetchall("category", "name codename is_regular_expense".split())
         return categories
 
     def get_all_categories(self) -> List[Dict]:
@@ -28,5 +27,5 @@ class Categories:
 
     def get_name_by_codename(self, category_codename: str) -> str:
         for category in self._categories:
-            if category['codename'] == category_codename:
-                return category['name']
+            if category["codename"] == category_codename:
+                return category["name"]
