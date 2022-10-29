@@ -1,22 +1,21 @@
+"""Работа с БД"""
 import os
 from typing import Dict, List, Tuple
 
 import sqlite3
 
 
-conn = sqlite3.connect(os.path.join("db", "finance.db"))
+conn = sqlite3.connect(os.path.join("db", "finance.db"))  # if not exists
 cursor = conn.cursor()
 
 
 def insert(table: str, column_values: Dict):
-    columns = ', '.join( column_values.keys() )
+    columns = ", ".join(column_values.keys())
     values = [tuple(column_values.values())]
-    placeholders = ", ".join( "?" * len(column_values.keys()) )
+    placeholders = ", ".join("?" * len(column_values.keys()))
     cursor.executemany(
-        f"INSERT INTO {table} "
-        f"({columns}) "
-        f"VALUES ({placeholders})",
-        values)
+        f"INSERT INTO {table} " f"({columns}) " f"VALUES ({placeholders})", values
+    )
     conn.commit()
 
 
@@ -38,14 +37,14 @@ def delete(table: str, row_id: int) -> None:
     cursor.execute(f"delete from {table} where id={row_id}")
     conn.commit()
 
-"""
+
 def get_cursor():
     return cursor
-"""
+
 
 def _init_db():
     """Инициализирует БД"""
-    with open("db_init.sql", mode="r", encoding='utf-8') as f:
+    with open("db_init.sql", mode="r", encoding="utf-8") as f:
         sql = f.read()
     cursor.executescript(sql)
     conn.commit()
@@ -53,11 +52,13 @@ def _init_db():
 
 def check_db_exists():
     """Проверяет, инициализирована ли БД, если нет — инициализирует"""
-    cursor.execute("SELECT name FROM sqlite_master "
-                   "WHERE type='table' AND name='expense'")
+    cursor.execute(
+        "SELECT name FROM sqlite_master " "WHERE type='table' AND name='expense'"
+    )
     table_exists = cursor.fetchall()
     if table_exists:
         return
     _init_db()
+
 
 check_db_exists()

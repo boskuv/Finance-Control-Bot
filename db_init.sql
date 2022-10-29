@@ -12,6 +12,14 @@ create table expense(
     FOREIGN KEY(category_codename) REFERENCES category(codename)
 );
 
+create table deposit(
+    id integer primary key,
+    card varchar(10),
+    amount double,
+    created datetime,
+    description varchar(255)
+);
+
 insert into category (name, codename, is_regular_expense)
 values
     ("Подписки", "subscriptions", true),
