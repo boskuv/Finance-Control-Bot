@@ -2,10 +2,10 @@ version: '3'
 
 services:
   preprocessor:
-    image: finance_conrol-rc1
+    image: finance_conrol
     build:
       context: .
-    container_name: finance_conrol-rc1
+    container_name: finance_conrol
     ports:
       - "8265:8265"
     volumes:
