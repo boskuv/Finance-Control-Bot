@@ -2,7 +2,7 @@
 from typing import List, NamedTuple, Optional, Literal
 
 
-import db
+import db.db as db
 from utils import get_now_formatted
 
 # import exceptions
@@ -21,7 +21,7 @@ class Deposit(NamedTuple):
     """Структура добавленного в БД нового расхода"""
 
     id: Optional[int]
-    card: Literal["VISA", "TNK", "MC", "MIR", "VTB"]  # TODO: sub by keyboard
+    card: Literal["SBER", "TNK", "VTB"]
     amount: float
     description: str
 

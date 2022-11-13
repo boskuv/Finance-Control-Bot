@@ -1,16 +1,6 @@
-from aiogram.dispatcher.filters.state import State, StatesGroup
 import datetime
 import re
 import pytz
-
-
-# TODO: naming
-class FinCheckerState(StatesGroup):
-    getting_list_of_expense_categories = State()
-    choosing_expense_category = State()
-    getting_list_of_cards = State()
-    choosing_deposit_card = State()
-    choosing_deposit_description = State()
 
 
 def get_now_formatted() -> str:

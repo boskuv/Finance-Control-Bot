@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Optional
 
 
 from utils import get_now_formatted
-import db
+import db.db as db
 
 # import exceptions
 # from categories import Categories
