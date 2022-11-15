@@ -13,6 +13,7 @@ from categories import Categories
 from utils import is_valid
 import exceptions
 from handlers.start import register_start
+from handlers.deposit import register_deposit
 
 """
 TOREAD:
@@ -56,6 +57,7 @@ async def main():
     dp = Dispatcher(bot, storage=storage)
 
     register_start(dp)
+    register_deposit(dp)
 
     try:
         await dp.start_polling()

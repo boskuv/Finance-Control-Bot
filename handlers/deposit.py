@@ -35,9 +35,7 @@ async def invite_to_choose_deposit_card(msg: Message, state: FSMContext):
     ]  # TODO: получение из БД + возможность добавления новых
     for card in cards:
         keyboard.insert(InlineKeyboardButton(text=card, callback_data=card))
-
-    await state.set_state(DepositStates.GETTING_LIST_OF_CARDS)
-
+    await DepositStates.GETTING_LIST_OF_CARDS.set()
     await msg.answer(f"Выберите карту пополнения: ", reply_markup=keyboard)
 
 
@@ -61,7 +59,7 @@ async def push_deposit_to_db(msg: Message, state: FSMContext):
     states = await state.get_data()
 
     deposit_values_from_states = list(states.values())
-    amount_of_deposit = msg.text
+    amount_of_deposit = msg.text  # TODO: check if valid
     deposit_values_from_states.append(amount_of_deposit)
 
     try:
@@ -87,25 +85,22 @@ def register_deposit(dp: Dispatcher):
         invite_to_choose_deposit_card,
         ChatTypeFilter(chat_type=ChatType.PRIVATE),
         commands=["add_deposit"],
-        state=None,  # "*",
+        state=None,
     )
-    dp.register_message_handler(
+    dp.register_callback_query_handler(
         choose_deposit_card,
         ChatTypeFilter(chat_type=ChatType.PRIVATE),
-        # commands=["add_deposit"],
-        state="getting_list_of_cards",
+        state=DepositStates.GETTING_LIST_OF_CARDS,
     )
     dp.register_message_handler(
         add_deposit_description,
         ChatTypeFilter(chat_type=ChatType.PRIVATE),
-        # commands=["add_deposit"],
-        state="choosing_deposit_card",
+        state=DepositStates.CHOOSING_DEPOSIT_CARD,
     )
     dp.register_message_handler(
         push_deposit_to_db,
         ChatTypeFilter(chat_type=ChatType.PRIVATE),
-        # commands=["add_deposit"],
-        state="choosing_deposit_description",
+        state=DepositStates.CHOOSING_DEPOSIT_DESCRIPTION,
     )
 
 
