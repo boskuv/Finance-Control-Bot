@@ -35,7 +35,7 @@ async def invite_to_choose_deposit_card(msg: Message, state: FSMContext):
     ]  # TODO: получение из БД + возможность добавления новых
     for card in cards:
         keyboard.insert(InlineKeyboardButton(text=card, callback_data=card))
-    await DepositStates.GETTING_LIST_OF_CARDS.set()
+    await state.set_state(DepositStates.GETTING_LIST_OF_CARDS)
     await msg.answer(f"Выберите карту пополнения: ", reply_markup=keyboard)
 
 
