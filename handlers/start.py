@@ -12,11 +12,12 @@ async def start_handler(
         resize_keyboard=True,
         keyboard=[
             [
-                KeyboardButton("/help"),
+                KeyboardButton("/sum_deposit"),
                 KeyboardButton("/add_deposit"),
-                KeyboardButton("/add_expense"),  # sum_deposit
+                KeyboardButton("/add_expense"),
             ],
             [
+                KeyboardButton("/help"),
                 KeyboardButton("/start"),  # stop
             ],
             [
