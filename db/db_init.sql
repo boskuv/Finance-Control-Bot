@@ -46,3 +46,4 @@ values
 	("Аптека", "pharm", false),
 	("Подарки", "gifts", false),
     ("Прочее", "other", false);
+    ("Лимит", "limit", true)

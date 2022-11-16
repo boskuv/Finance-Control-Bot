@@ -42,6 +42,11 @@ def add_expense(raw_message: str) -> Expense:
     )
 
 
+def get_sum_limited_expenses()-> float:
+    """Получить сумму трат в лимитной категории"""
+    return db.fetch_sum_by_specific_expense_category("expense", "category_codename", "limit")
+
+
 def _parse_message(raw_message: str) -> Message:
     """Парсит текст пришедшего сообщения о новом расходе."""
     category_codename = raw_message.split(",")[0]

@@ -54,6 +54,36 @@ async def push_expense_to_db(msg: Message, state: FSMContext):
         answer_message = (
             "Неверный формат ввода. Шаблон: '+/-sum. Например: +330 или -330.'"
         )
+
+    await msg.answer(answer_message)
+    await state.finish()
+
+
+async def invite_to_input_for_limited_expense(msg: Message, state: FSMContext):
+    """Предлагает ввести сумму траты по лимитной категории"""
+    await state.finish()
+
+    await state.set_state(ExpenseStates.ENTERING_LIMITED_EXPENSE)
+    await msg.answer("Введите затраченную сумму:")
+
+
+async def push_limited_expense_to_db(msg: Message, state: FSMContext):
+    """Добавляет введенную трату лимитной категории в БД"""
+    if is_valid(msg.text):
+        try:
+            expense = expenses.add_expense(",".join(["limit", msg.text]))
+
+            sum_limited_expenses = expenses.get_sum_limited_expenses()
+            left_limited_expenses = 10000 - sum_limited_expenses
+            
+            answer_message = f"Добавлены траты: {expense.amount} руб в лимитной категории. Остаток: {left_limited_expenses}.\n\n"
+        except exceptions.NotCorrectMessage as e:
+            answer_message = str(e)
+    else:
+        answer_message = (
+            "Неверный формат ввода. Шаблон: '+/-sum. Например: +330 или -330.'"
+        )
+
     await msg.answer(answer_message)
     await state.finish()
 
@@ -74,6 +104,17 @@ def register_expense(dp: Dispatcher):
         push_expense_to_db,
         ChatTypeFilter(chat_type=ChatType.PRIVATE),
         state=ExpenseStates.CHOOSING_EXPENSE_CATEGORY,
+    )
+    dp.register_message_handler(
+        invite_to_input_for_limited_expense,
+        ChatTypeFilter(chat_type=ChatType.PRIVATE),
+        commands=["add_limited_expense"],
+        state=None,
+    )
+    dp.register_message_handler(
+        push_limited_expense_to_db,
+        ChatTypeFilter(chat_type=ChatType.PRIVATE),
+        state=ExpenseStates.ENTERING_LIMITED_EXPENSE,
     )
 
 

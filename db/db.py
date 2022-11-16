@@ -32,6 +32,12 @@ def fetchall(table: str, columns: List[str]) -> List[Tuple]:  # TODO: naming
     return result
 
 
+def fetch_sum_by_specific_expense_category(table: str, column: str, category: str) -> float:
+    cursor.execute(f"SELECT sum(amount) FROM {table} where {column}='{category}'")
+    sum = cursor.fetchone()[0]
+    return sum
+
+
 def fetchsumforcurrentyear(table: str) -> float:
     cursor.execute(
         f"select sum(amount) FROM {table} where created > date('now','start of year')"

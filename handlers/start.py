@@ -15,6 +15,7 @@ async def start_handler(
                 KeyboardButton("/sum_deposit"),
                 KeyboardButton("/add_deposit"),
                 KeyboardButton("/add_expense"),
+                KeyboardButton("/add_limited_expense"),
             ],
             [
                 KeyboardButton("/help"),

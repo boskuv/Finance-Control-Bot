@@ -37,6 +37,7 @@ logging
 methods naming
 фильтрация пользователей
 Description in English
+обнуление лимита, начало нового отсчета
 """
 
 
